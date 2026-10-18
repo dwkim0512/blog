@@ -34,11 +34,23 @@ export function TableOfContents({ headings }: { headings: ArticleHeading[] }) {
 
   return (
     <nav aria-label="글 목차">
-      <p className="mb-3 text-sm font-semibold tracking-tight text-slate-950">목차</p>
-      <ol className="border-t border-slate-200">
+      <p className="mb-2 text-sm font-semibold tracking-tight text-slate-950">목차</p>
+      <ol className="border-l border-slate-200 py-1">
         {headings.map((heading) => (
           <li key={heading.id}>
-            <a href={`#${heading.id}`} onClick={(event) => moveToHeading(event, heading.id)} className={cn("block border-b border-slate-100 py-3 text-sm leading-5 transition-colors", heading.level === 3 ? "pl-4" : "pl-0", activeId === heading.id ? "font-semibold text-blue-600" : "text-slate-500 hover:text-slate-900")}>
+            <a
+              href={`#${heading.id}`}
+              title={heading.text}
+              aria-current={activeId === heading.id ? "location" : undefined}
+              onClick={(event) => moveToHeading(event, heading.id)}
+              className={cn(
+                "relative block truncate py-1.5 pr-1 leading-5 transition-colors before:absolute before:-left-px before:top-1 before:h-5 before:w-0.5 before:rounded-full before:bg-transparent",
+                heading.level === 3 ? "pl-5 text-[13px]" : "pl-3 text-sm font-medium",
+                activeId === heading.id
+                  ? "text-blue-600 before:bg-blue-600"
+                  : "text-slate-500 hover:text-slate-900",
+              )}
+            >
               {heading.text}
             </a>
           </li>
