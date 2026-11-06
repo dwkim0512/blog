@@ -74,8 +74,8 @@ export default function HomePage() {
           <img src="/golden-record-vinyl.png" alt="" className="hero-vinyl h-full w-full object-contain" />
         </div>
         <div className="mx-auto max-w-[1400px] px-5 py-12 lg:px-8 lg:py-16">
-          <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,520px)_minmax(0,1fr)] lg:gap-16">
-            <section aria-label="프로필 명함" className="flex min-h-[280px] w-full max-w-[520px] flex-col items-start gap-5 rounded-lg border border-[#dfe3dc] bg-white p-6 sm:flex-row sm:items-center sm:gap-6 sm:p-8">
+          <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,480px)_minmax(0,1fr)] lg:gap-16">
+            <section aria-label="프로필 명함" className="flex w-full max-w-[480px] flex-col items-start gap-5 rounded-lg border border-[#dfe3dc] bg-white p-6 sm:aspect-[1.8/1] sm:flex-row sm:items-center sm:gap-6 sm:p-8">
               <img src={profile?.avatar_url || "/default-profile.svg"} alt={`${profile?.name || "개발자"} 프로필`} className="h-16 w-16 shrink-0 rounded-full border border-slate-200 object-cover sm:h-24 sm:w-24" />
               <div className="min-w-0 flex-1">
                 <p className="text-xs font-semibold text-[#4f6258]">개발자 블로그</p>
@@ -108,12 +108,14 @@ export default function HomePage() {
         </nav>
         <div className="mb-6 flex flex-wrap items-end justify-between gap-5 border-b border-slate-200 pb-5">
           <h2 className="text-2xl font-semibold tracking-tight text-slate-950">{search ? `“${search}” 검색 결과` : category || "전체 게시글"}</h2>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap items-end gap-3">
+            <div className="w-48"><SearchBar /></div>
+            <div className="flex gap-2">
             <Button size="sm" variant={sortBy === "latest" ? "default" : "outline"} aria-pressed={sortBy === "latest"} onClick={() => setSortBy("latest")}>최신순</Button>
             <Button size="sm" variant={sortBy === "popular" ? "default" : "outline"} aria-pressed={sortBy === "popular"} onClick={() => setSortBy("popular")}>인기순</Button>
+            </div>
           </div>
         </div>
-        <div className="mb-7 max-w-sm"><SearchBar /></div>
         {loading ? (
           <div aria-label="게시글 불러오는 중" role="status" className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {[0, 1, 2].map(index => <div key={index} className="overflow-hidden rounded-lg border border-slate-200 bg-white"><Skeleton className="aspect-[2/1] w-full rounded-none" /><div className="space-y-4 p-6"><Skeleton className="h-4 w-20" /><Skeleton className="h-6 w-4/5" /><Skeleton className="h-12 w-full" /></div></div>)}
