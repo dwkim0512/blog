@@ -16,7 +16,7 @@ interface CategoryFilterProps {
   horizontal?: boolean
 }
 
-export function CategoryFilter({ categories, basePath = "/", onNavigateStart, horizontal = false }: CategoryFilterProps) {
+export function CategoryFilter({ categories, basePath = "/categories", onNavigateStart, horizontal = false }: CategoryFilterProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const selectedCategory = searchParams.get("category") || "All"
@@ -25,6 +25,7 @@ export function CategoryFilter({ categories, basePath = "/", onNavigateStart, ho
     if (categoryName === selectedCategory) return
     onNavigateStart?.()
     const params = new URLSearchParams(searchParams.toString())
+    params.delete("slug")
     if (categoryName === "All") {
       params.delete("category")
     } else {

@@ -52,15 +52,15 @@ export default function CategoriesPage() {
   }, [category, search, page, sortBy])
 
   return (
-    <div className="min-h-screen bg-[#f2f3f4]">
+    <div className="min-h-screen bg-[#f9fafb]">
       <Header />
 
       <div className="mx-auto max-w-[1400px] px-5 py-12 lg:px-8">
-        <div className="space-y-8">
+        <div className="grid items-start gap-8 lg:grid-cols-[180px_minmax(0,1fr)] lg:gap-12">
           {/* Sidebar */}
           <aside>
-            <div>
-              <CategoryFilter categories={categories} basePath="/categories" horizontal />
+            <div className="sticky top-28">
+              <CategoryFilter categories={categories} basePath="/categories" />
             </div>
           </aside>
 
