@@ -15,7 +15,7 @@ export default function Error({
   }, [error])
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div className="min-h-screen flex items-center justify-center bg-[#f2f3f4]">
       <div className="text-center">
         <h1 className="text-2xl font-bold text-gray-900 mb-4">오류가 발생했습니다</h1>
         <p className="text-gray-600 mb-8">{error.message || "알 수 없는 오류가 발생했습니다."}</p>

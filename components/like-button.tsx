@@ -65,8 +65,8 @@ export function LikeButton({ postSlug, initialCount = 0, initialLiked = false, o
       onClick={handleLike}
       disabled={isLoading}
       className={liked
-        ? "h-11 rounded-full bg-blue-600 px-6 text-white hover:bg-blue-700"
-        : "h-11 rounded-full border-gray-300 px-6 text-gray-600 hover:border-blue-600 hover:bg-blue-50 hover:text-blue-600"}
+        ? "h-11 rounded-full bg-[#34443c] px-6 text-white hover:bg-[#29372f]"
+        : "h-11 rounded-full border-gray-300 px-6 text-gray-600 hover:border-[#52685b] hover:bg-[#edf2ef] hover:text-[#52685b]"}
     >
       <Heart className={`mr-2 h-4 w-4 ${liked ? "fill-current" : ""}`} />
       좋아요 {count}

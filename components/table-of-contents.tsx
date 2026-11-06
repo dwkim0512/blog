@@ -47,7 +47,7 @@ export function TableOfContents({ headings }: { headings: ArticleHeading[] }) {
                 "relative block truncate py-1.5 pr-1 leading-5 transition-colors before:absolute before:-left-px before:top-1 before:h-5 before:w-0.5 before:rounded-full before:bg-transparent",
                 heading.level === 3 ? "pl-5 text-[13px]" : "pl-3 text-sm font-medium",
                 activeId === heading.id
-                  ? "text-blue-600 before:bg-blue-600"
+                  ? "text-[#52685b] before:bg-[#34443c]"
                   : "text-slate-500 hover:text-slate-900",
               )}
             >

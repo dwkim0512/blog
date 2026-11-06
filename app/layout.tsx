@@ -3,8 +3,8 @@ import './globals.css'
 import { Toaster } from "@/components/ui/sonner"
 
 export const metadata: Metadata = {
-  title: "DDONG's",
-  description: '',
+  title: "Golden Record",
+  description: '개발하며 배운 기술과 경험을 기록하는 Golden Record.',
   generator: 'Next.js',
   icons: {
     icon: '/icon.svg',  // app/icon.svg 파일 사용

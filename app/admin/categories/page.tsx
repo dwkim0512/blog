@@ -36,7 +36,7 @@ export default function CategoriesManagementPage() {
       const response = await fetch(`${getApiBaseUrl()}/api/auth/check`, {
         credentials: "include",
       })
-      
+
       if (!response.ok) {
         router.push("/")
         toast.error("권한이 필요한 페이지입니다.")
@@ -44,7 +44,7 @@ export default function CategoriesManagementPage() {
       }
 
       const authData = await response.json()
-      
+
       // authenticated 필드로 권한 확인
       if (!authData.authenticated) {
         router.push("/")
@@ -128,7 +128,7 @@ export default function CategoriesManagementPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#f2f3f4]">
       <Header />
 
       <div className="max-w-7xl mx-auto px-4 py-8">

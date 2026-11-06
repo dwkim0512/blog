@@ -3,7 +3,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 export default function Loading() {
   return (
     <div className="min-h-screen bg-white" aria-hidden="true">
-      <div className="h-16 border-b border-blue-700 bg-blue-600">
+      <div className="h-16 border-b border-blue-700 bg-[#34443c]">
         <div className="mx-auto flex h-full max-w-[1480px] items-center justify-between px-5 lg:px-8">
           <div className="flex items-center gap-2">
             <div className="h-8 w-8 rounded-lg bg-white/90" />

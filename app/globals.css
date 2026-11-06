@@ -11,8 +11,33 @@ body {
 }
 
 html {
+  scrollbar-gutter: stable;
   scroll-behavior: smooth;
   scroll-padding-top: 6rem;
+}
+
+@supports not (scrollbar-gutter: stable) {
+  html { overflow-y: scroll; }
+}
+
+@keyframes vinyl-turn {
+  to { transform: rotate(360deg); }
+}
+
+.hero-vinyl {
+  animation: vinyl-turn 50s linear infinite;
+  transform-origin: center;
+  filter: grayscale(0.65);
+}
+
+.hero-vinyl-backdrop {
+  opacity: 0.45;
+  mix-blend-mode: multiply;
+  mask-image: linear-gradient(to right, transparent, #000 42%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-vinyl { animation: none; }
 }
 
 .article-body {
@@ -41,8 +66,8 @@ html {
 }
 
 .article-body blockquote {
-  border-left-color: #3b82f6;
-  background: #eff6ff;
+  border-left-color: #52685b;
+  background: #edf2ef;
   color: #334155;
   border-radius: 0 0.75rem 0.75rem 0;
   padding: 0.8rem 1.2rem;
@@ -185,19 +210,19 @@ html {
     --card-foreground: 0 0% 3.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 3.9%;
-    --primary: 0 0% 9%;
+    --primary: 144 13% 24%;
     --primary-foreground: 0 0% 98%;
     --secondary: 0 0% 96.1%;
     --secondary-foreground: 0 0% 9%;
     --muted: 0 0% 96.1%;
     --muted-foreground: 0 0% 45.1%;
-    --accent: 0 0% 96.1%;
+    --accent: 140 10% 94%;
     --accent-foreground: 0 0% 9%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
     --border: 0 0% 89.8%;
     --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
+    --ring: 144 13% 34%;
     --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;
     --chart-3: 197 37% 24%;

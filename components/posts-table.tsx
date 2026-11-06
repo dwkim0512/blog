@@ -114,7 +114,7 @@ export function PostsTable() {
           postList.map((post) => (
             <TableRow key={post.id}>
               <TableCell className="font-medium">
-                <Link href={postViewHref(post.slug)} className="hover:text-blue-600">
+                <Link href={postViewHref(post.slug)} className="hover:text-[#52685b]">
                   {post.title}
                 </Link>
               </TableCell>

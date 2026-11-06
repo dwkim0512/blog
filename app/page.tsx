@@ -1,228 +1,126 @@
-"use client";
-import { useSearchParams } from "next/navigation";
-import Link from "next/link";
-import { getApiBaseUrl } from "@/lib/api-client";
-import { useEffect, useState } from "react";
+"use client"
+
+import { useSearchParams } from "next/navigation"
+import Link from "next/link"
+import { useEffect, useState } from "react"
+import { ArrowRight } from "lucide-react"
 import { Header } from "@/components/header"
 import { PostCard } from "@/components/post-card"
-import { CategoryFilter } from "@/components/category-filter"
-import { SearchBar } from "@/components/search-bar"
-import { BlogRightRail } from "@/components/blog-right-rail"
+import { ProfileContact } from "@/components/profile-contact"
 import { PostPagination } from "@/components/post-pagination"
-
-import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
-import { ArrowRight, Github } from "lucide-react"
-import { apiClient } from "@/lib/api-client"
-import { Profile } from "@/lib/profile"
+import { apiClient, getApiBaseUrl } from "@/lib/api-client"
+import { postViewHref } from "@/lib/post-routes"
+import type { Profile } from "@/lib/profile"
+import type { Post } from "@/lib/models/post"
+
+interface Category { id: number; name: string; post_count?: number }
+interface PostList { posts: Post[]; pagination: { page: number; totalPages: number; total?: number } | null }
 
 export default function HomePage() {
-  const searchParams = useSearchParams();
-  const category = searchParams.get("category") || "";
-  const search = searchParams.get("search") || "";
-  const page = Number.parseInt(searchParams.get("page") || "1");
-
-  const [posts, setPosts] = useState<any>({ posts: [], pagination: null });
-  const [categories, setCategories] = useState<any[]>([]);
-  const [stats, setStats] = useState<any>({});
-  const [profile, setProfile] = useState<Profile | null>(null);
-  const [popularPosts, setPopularPosts] = useState<any[]>([]);
-  const [sortBy, setSortBy] = useState<"latest" | "popular">("latest");
-  const [isLoading, setIsLoading] = useState(true);
-  const [showSkeleton, setShowSkeleton] = useState(true);
+  const params = useSearchParams()
+  const category = params.get("category") || ""
+  const search = params.get("search") || ""
+  const page = Math.max(1, Number.parseInt(params.get("page") || "1") || 1)
+  const [data, setData] = useState<PostList>({ posts: [], pagination: null })
+  const [categories, setCategories] = useState<Category[]>([])
+  const [latest, setLatest] = useState<Post[]>([])
+  const [profile, setProfile] = useState<Profile | null>(null)
+  const [sortBy, setSortBy] = useState<"latest" | "popular">("latest")
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(false)
 
   useEffect(() => {
-    if (!isLoading) {
-      setShowSkeleton(false)
-      return
-    }
-
-    // 최초 진입 이후의 빠른 필터 전환에서는 스켈레톤이 순간적으로 번쩍이지 않게 한다.
-    if (showSkeleton) return
-    const timer = window.setTimeout(() => setShowSkeleton(true), 220)
-    return () => window.clearTimeout(timer)
-  }, [isLoading, showSkeleton])
+    let active = true
+    Promise.all([
+      apiClient.getCategories().catch(() => []),
+      apiClient.getAdminProfile().catch(() => null),
+      apiClient.getPosts({ page: 1, limit: 3, sortBy: "created_at" }).catch(() => ({ posts: [] })),
+    ]).then(([categoryData, profileData, latestData]) => {
+      if (!active) return
+      setCategories(categoryData as Category[])
+      setProfile((profileData as { profile?: Profile } | null)?.profile || null)
+      setLatest((latestData as { posts: Post[] }).posts || [])
+    })
+    fetch(`${getApiBaseUrl()}/api/visitors/track`, { method: "POST", credentials: "include" }).catch(() => {})
+    return () => { active = false }
+  }, [])
 
   useEffect(() => {
-    const loadData = async () => {
-      setIsLoading(true);
-      try {
-        const sortParam = sortBy === "popular" ? "likes" : "created_at";
-        const postsData = await apiClient.getPosts({ category, search, page, limit: 10, sortBy: sortParam }).catch(() => ({ posts: [], pagination: null }));
-        setPosts(postsData as any);
+    let active = true
+    setLoading(true)
+    setError(false)
+    apiClient.getPosts({ category, search, page, limit: 9, sortBy: sortBy === "popular" ? "likes" : "created_at" })
+      .then(result => { if (active) setData(result as PostList) })
+      .catch(() => { if (active) { setError(true); setData({ posts: [], pagination: null }) } })
+      .finally(() => { if (active) setLoading(false) })
+    return () => { active = false }
+  }, [category, search, page, sortBy])
 
-        const popularData = await apiClient.getPosts({ page: 1, limit: 4, sortBy: "likes" }).catch(() => ({ posts: [] }));
-        setPopularPosts(Array.isArray((popularData as any).posts) ? (popularData as any).posts : []);
-        
-        const categoriesData = await apiClient.getCategories().catch(() => []);
-        setCategories((categoriesData as any[]).map((cat) => ({
-          ...cat,
-          postCount: cat.post_count ?? 0,
-        })));
-        
-        const statsData = await apiClient.getStats().catch(() => ({}));
-        setStats(statsData);
-        
-        const profileData = await apiClient.getAdminProfile().catch(() => null);
-        if (profileData) {
-          setProfile((profileData as any).profile);
-        }
-      } catch (error) {
-        console.error("Error loading data:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    
-    loadData();
-    
-    // 방문자 추적 (페이지 로드 시 한 번만)
-    fetch(`${getApiBaseUrl()}/api/visitors/track`, { method: "POST", credentials: "include" }).catch(() => {});
-  }, [category, search, page, sortBy]);
+  const categoryHref = (name?: string) => {
+    const next = new URLSearchParams()
+    if (name) next.set("category", name)
+    if (search) next.set("search", search)
+    return next.size ? `/?${next.toString()}` : "/"
+  }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#f2f3f4]">
       <Header />
-
-      {showSkeleton ? (
-        <main aria-hidden="true">
-          <section className="border-b border-gray-200">
-            <div className="mx-auto max-w-[1480px] px-5 py-8 lg:px-8 lg:py-9">
-              <div className="mx-auto flex max-w-3xl flex-col items-center gap-5 sm:flex-row">
-                <Skeleton className="h-24 w-24 shrink-0 rounded-full" />
-                <div className="w-full space-y-3">
-                  <Skeleton className="h-4 w-24" />
-                  <Skeleton className="h-9 w-40" />
-                  <Skeleton className="h-5 w-4/5" />
-                  <Skeleton className="h-4 w-52" />
-                </div>
+      <section className="relative isolate overflow-hidden border-b border-[#e2e5e7] bg-[#f9fafb]">
+        <div aria-hidden="true" className="hero-vinyl-backdrop pointer-events-none absolute -right-[800px] top-1/2 -z-10 hidden h-[1200px] w-[1200px] -translate-y-1/2 lg:block">
+          <img src="/golden-record-vinyl.png" alt="" className="hero-vinyl h-full w-full object-contain" />
+        </div>
+        <div className="mx-auto max-w-[1400px] px-5 py-12 lg:px-8 lg:py-16">
+          <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,480px)_minmax(0,1fr)] lg:gap-16">
+            <section aria-label="프로필 명함" className="flex w-full max-w-[480px] flex-col items-start gap-5 rounded-lg border border-[#dfe3dc] bg-white p-6 sm:aspect-[1.8/1] sm:flex-row sm:items-center sm:gap-6 sm:p-8">
+              <img src={profile?.avatar_url || "/default-profile.svg"} alt={`${profile?.name || "개발자"} 프로필`} className="h-16 w-16 shrink-0 rounded-full border border-slate-200 object-cover sm:h-24 sm:w-24" />
+              <div className="min-w-0 flex-1">
+                <h1 className="text-3xl font-semibold tracking-[-0.04em] text-[#242b25]">{profile?.name || "Golden Record"}</h1>
+                <p className="mt-3 text-sm leading-6 text-[#70756b]">{profile?.bio || "개발하며 배우고 경험한 내용을 기록합니다."}</p>
+                <ProfileContact githubUsername={profile?.github_username} />
+                <Link href="/about" className="mt-3 inline-flex items-center gap-1 text-xs text-[#66735f] hover:underline">더 보기 <ArrowRight className="h-3.5 w-3.5" /></Link>
               </div>
-            </div>
-          </section>
-          <div className="mx-auto max-w-[1480px] px-5 py-10 lg:px-8 lg:py-12">
-            <div className="grid grid-cols-1 gap-10 lg:grid-cols-[210px_minmax(0,1fr)] xl:grid-cols-[210px_minmax(0,860px)_210px] xl:justify-between xl:gap-12">
-              <aside className="space-y-8"><Skeleton className="h-10 w-full" /><Skeleton className="h-5 w-24" /><Skeleton className="h-4 w-32" /><Skeleton className="h-4 w-28" /></aside>
-              <section className="min-w-0 space-y-7">
-                <div className="flex items-center justify-between border-b border-gray-200 pb-5"><Skeleton className="h-8 w-32" /><Skeleton className="h-9 w-36" /></div>
-                {Array.from({ length: 3 }).map((_, index) => (
-                  <div key={index} className="space-y-4 border-b border-slate-200 pb-7">
-                    <Skeleton className="h-4 w-24" /><Skeleton className="h-8 w-3/4" /><Skeleton className="h-4 w-full" /><Skeleton className="h-4 w-5/6" />
-                  </div>
-                ))}
-              </section>
-              <aside className="hidden space-y-5 xl:block"><Skeleton className="h-5 w-28" /><Skeleton className="h-24 w-full" /><Skeleton className="h-5 w-24" /><Skeleton className="h-36 w-full" /></aside>
-            </div>
-          </div>
-        </main>
-      ) : (
-        <>
-
-      <section className="border-b border-gray-200 bg-white">
-        <div className="mx-auto max-w-[1480px] px-5 py-8 lg:px-8 lg:py-9">
-          <div className="mx-auto flex max-w-3xl flex-col items-center gap-5 text-center sm:flex-row sm:text-left">
-            <img
-              src={profile?.avatar_url || "/default-profile.svg"}
-              alt={`${profile?.name || "관리자"} 프로필`}
-              className="h-24 w-24 shrink-0 rounded-full border border-slate-200 bg-white object-cover shadow-sm"
-            />
-            <div className="min-w-0">
-              <p className="mb-1 text-sm font-semibold text-blue-600">개발자 블로그</p>
-              <h1 className="mb-2 text-3xl font-semibold tracking-[-0.04em] text-gray-950">{profile?.name || "DDONG's"}</h1>
-              <p className="max-w-2xl text-base leading-7 text-gray-500">{profile?.bio || "개발하며 배우고 경험한 내용을 기록합니다."}</p>
-              <div className="mt-3 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-sm text-gray-500 sm:justify-start">
-                {profile?.github_username && (
-                  <a
-                    href={`https://github.com/${profile.github_username.replace(/^@/, "")}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex items-center gap-1.5 transition-colors hover:text-blue-600"
-                  >
-                    <Github className="h-4 w-4 text-blue-600" />@{profile.github_username.replace(/^@/, "")}
-                  </a>
-                )}
-                <Link href="/about" className="flex items-center gap-1 text-gray-500 transition-colors hover:text-blue-600">
-                  더 보기 <ArrowRight className="h-3.5 w-3.5" />
+            </section>
+            <section aria-label="최신 게시글" className="min-w-0 lg:mr-24">
+              <h2 className="mb-2 text-xs font-semibold tracking-wide text-[#778170]">새로 새긴 기록</h2>
+              {latest.map((post, index) => (
+                <Link key={post.id} href={postViewHref(post.slug)} className="group flex items-center gap-4 border-b border-[#dfe3df] py-4">
+                  <span className="text-xs tabular-nums text-[#949c8d]">0{index + 1}</span>
+                  <div className="min-w-0 flex-1"><p className="text-[11px] text-[#7b8774]">{post.category_name || "미분류"}</p><h3 className="mt-1 truncate text-base font-medium text-[#363e32] group-hover:underline">{post.title}</h3></div>
+                  <ArrowRight className="h-4 w-4 shrink-0 text-[#949d8c]" />
                 </Link>
-              </div>
-            </div>
+              ))}
+              {!latest.length && <p className="py-6 text-sm text-slate-500">새로운 기록을 준비하고 있습니다.</p>}
+            </section>
           </div>
         </div>
       </section>
 
-      {/* Main Content */}
-      <div className="mx-auto max-w-[1480px] px-5 py-10 lg:px-8 lg:py-12">
-        <div className="grid grid-cols-1 gap-10 lg:grid-cols-[210px_minmax(0,1fr)] xl:grid-cols-[210px_minmax(0,860px)_210px] xl:justify-between xl:gap-12">
-          {/* Sidebar */}
-          <aside>
-            <div className="sticky top-24 space-y-10">
-              <SearchBar onNavigateStart={() => setIsLoading(true)} />
-              <CategoryFilter categories={categories} onNavigateStart={() => setIsLoading(true)} />
-            </div>
-          </aside>
-
-          {/* Posts Grid */}
-          <main id="posts" className="min-w-0 scroll-mt-24">
-            <div className="mb-7 flex items-center justify-between border-b border-gray-200 pb-5">
-              <h2 className="text-2xl font-semibold tracking-[-0.025em] text-gray-950">
-                {category && category !== "All" ? `${category} 게시글` : "최근 게시글"}
-                {search && ` - "${search}" 검색 결과`}
-              </h2>
-              <div className="flex items-center gap-2">
-                <Button
-                  variant={sortBy === "latest" ? "default" : "outline"}
-                  size="sm"
-                  className={sortBy === "latest" ? "bg-blue-600 hover:bg-blue-700" : ""}
-                  onClick={() => {
-                    if (sortBy === "latest") return
-                    setIsLoading(true)
-                    setSortBy("latest")
-                  }}
-                >
-                  최신순
-                </Button>
-                <Button
-                  variant={sortBy === "popular" ? "default" : "outline"}
-                  size="sm"
-                  className={sortBy === "popular" ? "bg-blue-600 hover:bg-blue-700" : ""}
-                  onClick={() => {
-                    if (sortBy === "popular") return
-                    setIsLoading(true)
-                    setSortBy("popular")
-                  }}
-                >
-                  인기순
-                </Button>
-              </div>
-            </div>
-
-            {Array.isArray(posts.posts) && posts.posts.length > 0 ? (
-              <>
-                <div className="grid gap-7">
-                  {posts.posts.map((post: any) => (
-                    <PostCard key={post.id} post={post} />
-                  ))}
-                </div>
-                {/* Pagination */}
-                {posts.pagination && <PostPagination currentPage={posts.pagination.page} totalPages={posts.pagination.totalPages} onNavigateStart={() => setIsLoading(true)} />}
-              </>
-            ) : (
-              <div className="text-center py-12">
-                <p className="text-gray-500">
-                  {search ? `"${search}"에 대한 검색 결과가 없습니다.` : "게시글이 없습니다."}
-                </p>
-              </div>
-            )}
-          </main>
-
-          <aside className="hidden xl:block">
-            <div className="sticky top-24">
-              <BlogRightRail popularPosts={popularPosts} stats={stats} />
-            </div>
-          </aside>
+      <main id="posts" className="mx-auto max-w-[1400px] scroll-mt-24 px-5 py-8 pb-20 lg:px-8 lg:py-10">
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+        <nav aria-label="게시글 카테고리" className="flex flex-wrap items-center gap-x-5 gap-y-2">
+          {[{ id: 0, name: "" }, ...categories].map(item => (
+            <Link key={item.id} href={categoryHref(item.name)} aria-current={category === item.name ? "page" : undefined} className={`border-b-2 px-1 py-2 text-sm font-semibold ${category === item.name ? "border-[#34443c] text-[#34443c]" : "border-transparent text-slate-500 hover:text-slate-900"}`}>{item.name || "전체"}</Link>
+          ))}
+        </nav>
+          <div role="group" aria-label="게시글 정렬" className="ml-auto flex items-center gap-3 text-sm">
+            <button type="button" className={`rounded-sm py-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#52685b] ${sortBy === "latest" ? "font-medium text-[#34443c]" : "text-slate-400 hover:text-slate-700"}`} aria-pressed={sortBy === "latest"} onClick={() => setSortBy("latest")}>최신순</button>
+            <span aria-hidden="true" className="text-slate-300">·</span>
+            <button type="button" className={`rounded-sm py-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#52685b] ${sortBy === "popular" ? "font-medium text-[#34443c]" : "text-slate-400 hover:text-slate-700"}`} aria-pressed={sortBy === "popular"} onClick={() => setSortBy("popular")}>인기순</button>
+          </div>
         </div>
-      </div>
-        </>
-      )}
+        {search ? <h2 className="mb-5 text-sm text-slate-600">{`“${search}” 검색 결과`}</h2> : <h2 className="sr-only">게시글 목록</h2>}
+        {loading ? (
+          <div aria-label="게시글 불러오는 중" role="status" className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {[0, 1, 2].map(index => <div key={index} className="overflow-hidden rounded-lg border border-slate-200 bg-white"><Skeleton className="aspect-[2/1] w-full rounded-none" /><div className="space-y-4 p-6"><Skeleton className="h-4 w-20" /><Skeleton className="h-6 w-4/5" /><Skeleton className="h-12 w-full" /></div></div>)}
+          </div>
+        ) : error ? <p role="alert" className="py-16 text-center text-sm text-slate-500">게시글을 불러오지 못했습니다. 잠시 후 새로고침해 주세요.</p>
+          : data.posts.length ? <>
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">{data.posts.map(post => <PostCard key={post.id} post={post} />)}</div>
+            {data.pagination && <PostPagination currentPage={data.pagination.page} totalPages={data.pagination.totalPages} />}
+          </> : <p className="py-16 text-center text-sm text-slate-500">{search ? "검색 결과가 없습니다." : "아직 게시글이 없습니다."}</p>}
+      </main>
     </div>
   )
 }

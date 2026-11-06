@@ -15,6 +15,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import type { Profile } from "@/lib/profile"
+import { ProfileContact } from "@/components/profile-contact"
 
 interface AboutPage {
   id: number
@@ -139,7 +140,7 @@ export default function AboutPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-[#f2f3f4]">
         <Header />
         <div className="mx-auto max-w-4xl animate-pulse space-y-8 px-4 py-10" aria-hidden="true">
           <div className="grid gap-8 border border-slate-200 bg-white p-7 sm:grid-cols-[160px_minmax(0,1fr)] sm:items-center sm:p-10">
@@ -153,7 +154,7 @@ export default function AboutPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#f2f3f4]">
       <Header />
       <div className="mx-auto max-w-4xl space-y-8 px-4 py-10">
         <section className="overflow-hidden border border-slate-200 bg-white shadow-sm">
@@ -164,9 +165,10 @@ export default function AboutPage() {
               className="mx-auto h-40 w-40 rounded-full border border-slate-200 bg-white object-cover shadow-sm sm:mx-0"
             />
             <div className="text-center sm:text-left">
-              <p className="mb-2 text-sm font-semibold uppercase tracking-[0.12em] text-blue-600">Profile</p>
-              <h1 className="text-3xl font-semibold tracking-[-0.035em] text-slate-950 sm:text-4xl">{profile?.name || "DDONG's"}</h1>
+              <p className="mb-2 text-sm font-semibold uppercase tracking-[0.12em] text-[#52685b]">Profile</p>
+              <h1 className="text-3xl font-semibold tracking-[-0.035em] text-slate-950 sm:text-4xl">{profile?.name || "Golden Record"}</h1>
               <p className="mt-4 max-w-2xl text-base leading-7 text-slate-600">{profile?.bio || "개발하며 배우고 경험한 내용을 기록합니다."}</p>
+              <ProfileContact githubUsername={profile?.github_username} />
               {profile?.github_username && (
                 <Button asChild variant="outline" className="mt-6 rounded-full">
                   <a href={`https://github.com/${profile.github_username.replace(/^@/, "")}`} target="_blank" rel="noreferrer">

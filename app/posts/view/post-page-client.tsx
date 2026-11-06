@@ -3,13 +3,12 @@
 import { useEffect, useMemo, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
-import { ArrowLeft, CalendarDays, Heart, MessageCircle, Pencil, Trash2 } from "lucide-react"
+import { CalendarDays, Heart, MessageCircle, Pencil, Trash2 } from "lucide-react"
 import { Header } from "@/components/header"
 import { CommentSection } from "@/components/comment-section"
 import { LikeButton } from "@/components/like-button"
 import { MarkdownArticle, extractArticleHeadings } from "@/components/markdown-article"
 import { TableOfContents } from "@/components/table-of-contents"
-import { SearchBar } from "@/components/search-bar"
 import { CategoryFilter } from "@/components/category-filter"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -89,7 +88,7 @@ export default function PostPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-white">
+      <div className="min-h-screen bg-[#f9fafb]">
         <Header />
         <div className="mx-auto max-w-3xl animate-pulse px-5 py-20">
           <div className="mb-6 h-4 w-24 rounded bg-slate-200" />
@@ -103,7 +102,7 @@ export default function PostPage() {
 
   if (error || !post) {
     return (
-      <div className="min-h-screen bg-white">
+      <div className="min-h-screen bg-[#f9fafb]">
         <Header />
         <div className="mx-auto max-w-2xl px-5 py-24 text-center">
           <h1 className="mb-6 text-2xl font-bold text-slate-900">{error || "게시글을 찾을 수 없습니다."}</h1>
@@ -114,23 +113,14 @@ export default function PostPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white text-slate-950">
+    <div className="min-h-screen bg-[#f9fafb] text-slate-950">
       <Header />
-      <main className="mx-auto max-w-[1480px] px-5 pb-24 pt-10 lg:px-8 lg:pt-14">
-        <Link href="/" className="mb-10 inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition-colors hover:text-slate-950">
-          <ArrowLeft className="h-4 w-4" />글 목록
-        </Link>
-
-        <div className="grid gap-10 lg:grid-cols-[210px_minmax(0,1fr)] xl:grid-cols-[210px_minmax(0,860px)_210px] xl:justify-between xl:gap-12 xl:items-start">
-          <aside className="hidden lg:block">
-            <div className="sticky top-24 space-y-10">
-              <SearchBar />
-              <CategoryFilter categories={categories} />
-            </div>
-          </aside>
+      <main className="mx-auto max-w-[1400px] px-5 pb-24 pt-10 lg:px-8 lg:pt-12">
+        <div className="grid items-start gap-8 lg:grid-cols-[180px_minmax(0,1fr)] lg:gap-12 xl:grid-cols-[180px_minmax(0,1fr)_180px]">
+          <aside className="hidden lg:block"><div className="sticky top-28"><CategoryFilter categories={categories} basePath="/categories" /></div></aside>
 
           <article className="min-w-0">
-            <header className="mb-12 border-b border-slate-200 pb-10">
+            <header className="mb-10 pb-2">
               <Badge variant="secondary" className="mb-5 rounded-none bg-transparent px-0 text-gray-700 hover:bg-transparent">{post.category_name || "미분류"}</Badge>
               <h1 className="text-balance text-4xl font-semibold leading-[1.18] tracking-[-0.04em] text-slate-950 md:text-5xl">{post.title}</h1>
               <div className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-3 text-sm text-slate-500">
@@ -155,7 +145,9 @@ export default function PostPage() {
             <div className="mt-14"><CommentSection postSlug={post.slug} /></div>
           </article>
 
-          <aside className="sticky top-24 hidden xl:block"><TableOfContents headings={headings} /></aside>
+          <aside className="sticky top-24 hidden space-y-10 xl:block">
+            <TableOfContents headings={headings} />
+          </aside>
         </div>
       </main>
     </div>

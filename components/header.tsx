@@ -2,7 +2,7 @@
 
 import { useState, useEffect, type FormEvent } from "react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
@@ -27,6 +27,12 @@ export function Header() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
   const router = useRouter()
+  const pathname = usePathname()
+  const menuClass = (href: string) => `text-sm font-medium transition-colors ${pathname.replace(/\/$/, "") === href.replace(/\/$/, "") ? "text-[#34443c]" : "text-slate-400 hover:text-[#34443c]"}`
+  const headerClass = "border-slate-200 bg-white/95 backdrop-blur-xl"
+  const foregroundClass = "text-slate-950"
+  const mutedClass = "text-slate-500 hover:text-[#34443c]"
+  const accentClass = "bg-[#34443c] text-white hover:bg-[#29372f]"
 
   useEffect(() => {
     // 페이지 로드 시 로그인 상태 확인
@@ -113,78 +119,53 @@ export function Header() {
   const handleSearch = (event: FormEvent) => {
     event.preventDefault()
     const query = searchQuery.trim()
-    router.push(query ? `/?search=${encodeURIComponent(query)}` : "/")
+    const params = new URLSearchParams()
+    if (query) params.set("search", query)
+    router.push(params.size ? `/?${params.toString()}` : "/")
     setIsMenuOpen(false)
   }
 
   return (
     <>
-      <header className="fixed inset-x-0 top-0 z-50 border-b border-blue-700 bg-blue-600">
-        <div className="mx-auto max-w-[1480px] px-5 lg:px-8">
-          <div className="relative flex h-16 items-center justify-between">
+      <header className={`fixed inset-x-0 top-0 z-50 border-b ${headerClass}`}>
+        <div className="mx-auto max-w-[1400px] px-5 lg:px-8">
+          <div className="relative flex h-[72px] items-center justify-between">
             {/* Logo */}
-            <Link href="/" className="flex items-center space-x-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white">
-                <span className="text-sm font-bold text-blue-600">D</span>
-              </div>
-              <span className="text-xl font-bold text-white">DDONG's</span>
+            <Link href="/" className="flex shrink-0 items-center gap-2">
+              <span className={`text-[18px] font-medium leading-none tracking-[0.12em] text-[#303532]`}>GOLDEN RECORD</span>
             </Link>
 
             {/* Desktop Navigation */}
-            <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-[120px] md:flex">
-              <Link href="/" className="
-  relative text-blue-100 transition-colors
-  after:absolute after:-bottom-1 after:left-0
-  after:h-[2px] after:w-0 after:bg-white
-  after:transition-all after:duration-300
-  hover:text-white hover:after:w-full
-">
+            <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-10 xl:flex lg:gap-16">
+              <Link href="/" className={menuClass("/")} aria-current={pathname === "/" ? "page" : undefined}>
                 홈
               </Link>
-              <Link href="/categories" className="
-  relative text-blue-100 transition-colors
-  after:absolute after:-bottom-1 after:left-0
-  after:h-[2px] after:w-0 after:bg-white
-  after:transition-all after:duration-300
-  hover:text-white hover:after:w-full
-">
+              <Link href="/categories" className={menuClass("/categories")}>
                 카테고리
               </Link>
-              <Link href="/portfolio" className="
-  relative text-blue-100 transition-colors
-  after:absolute after:-bottom-1 after:left-0
-  after:h-[2px] after:w-0 after:bg-white
-  after:transition-all after:duration-300
-  hover:text-white hover:after:w-full
-">
+              <Link href="/portfolio" className={menuClass("/portfolio")}>
                 포트폴리오
               </Link>
-              <Link href="/about" className="
-  relative text-blue-100 transition-colors
-  after:absolute after:-bottom-1 after:left-0
-  after:h-[2px] after:w-0 after:bg-white
-  after:transition-all after:duration-300
-  hover:text-white hover:after:w-full
-">
+              <Link href="/about" className={menuClass("/about")}>
                 소개
               </Link>
             </nav>
 
             {/* Desktop Actions */}
-            <div className="hidden items-center space-x-3 md:flex">
-              <form onSubmit={handleSearch} className="hidden h-9 items-center rounded-md border border-white/30 bg-white/10 px-3 lg:flex">
-                <Search className="h-4 w-4 shrink-0 text-blue-100" />
+            <div className="hidden items-center space-x-3 xl:flex">
+              <form onSubmit={handleSearch} className={`hidden h-9 items-center rounded-full border px-3 lg:flex border-slate-200 bg-white`}>
+                <Search className={`h-4 w-4 shrink-0 text-slate-400`} />
                 <input
                   value={searchQuery}
                   onChange={(event) => setSearchQuery(event.target.value)}
                   aria-label="게시글 검색"
                   placeholder="검색"
-                  className="w-28 bg-transparent px-2 text-sm text-white outline-none placeholder:text-blue-100/80 xl:w-36"
+                  className={`w-24 bg-transparent px-2 text-sm outline-none xl:w-32 text-slate-900 placeholder:text-slate-400`}
                 />
               </form>
               {isLoggedIn ? (
                 <div className="flex items-center space-x-3">
-                  <Button variant="outline" size="sm" className="border-white/40 bg-transparent text-white hover:bg-white/10 hover:text-white" asChild>
+                  <Button variant="outline" size="sm" className="border-slate-200 bg-white text-[#34443c] hover:bg-slate-100" asChild>
                     <Link href="/admin/write">
                       <PenTool className="w-4 h-4 mr-2" />
                       글쓰기
@@ -222,56 +203,56 @@ export function Header() {
                   </DropdownMenu>
                 </div>
               ) : (
-                <Button onClick={() => setIsLoginModalOpen(true)} size="sm" className="bg-white text-blue-700 hover:bg-blue-50">
+                <Button onClick={() => setIsLoginModalOpen(true)} size="sm" className={`rounded-full ${accentClass}`}>
                   로그인
                 </Button>
               )}
             </div>
 
             {/* Mobile Menu Button */}
-            <button className="p-2 text-white md:hidden" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+            <button aria-label={isMenuOpen ? "메뉴 닫기" : "메뉴 열기"} aria-expanded={isMenuOpen} className={`p-2 xl:hidden ${foregroundClass}`} onClick={() => setIsMenuOpen(!isMenuOpen)}>
               {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
 
           {/* Mobile Menu */}
           {isMenuOpen && (
-            <div className="border-t border-blue-500 bg-blue-600 md:hidden">
+            <div className="border-t border-slate-200 bg-white xl:hidden">
               <nav className="py-4 space-y-2">
-                <form onSubmit={handleSearch} className="mx-4 mb-4 flex h-10 items-center rounded-md border border-white/30 bg-white/10 px-3">
-                  <Search className="h-4 w-4 text-blue-100" />
+                <form onSubmit={handleSearch} className="mx-4 mb-4 flex h-10 items-center rounded-md border border-slate-200 bg-slate-50 px-3">
+                  <Search className="h-4 w-4 text-slate-500" />
                   <input
                     value={searchQuery}
                     onChange={(event) => setSearchQuery(event.target.value)}
                     aria-label="게시글 검색"
                     placeholder="게시글 검색"
-                    className="min-w-0 flex-1 bg-transparent px-2 text-sm text-white outline-none placeholder:text-blue-100/80"
+                    className="min-w-0 flex-1 bg-transparent px-2 text-sm text-slate-900 outline-none placeholder:text-slate-400"
                   />
                 </form>
                 <Link
                   href="/"
-                  className="block px-4 py-2 text-blue-50 hover:bg-white/10"
+                  className="block px-4 py-2 text-slate-600 hover:bg-slate-100"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   홈
                 </Link>
                 <Link
                   href="/categories"
-                  className="block px-4 py-2 text-blue-50 hover:bg-white/10"
+                  className="block px-4 py-2 text-slate-600 hover:bg-slate-100"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   카테고리
                 </Link>
                 <Link
                   href="/portfolio"
-                  className="block px-4 py-2 text-blue-50 hover:bg-white/10"
+                  className="block px-4 py-2 text-slate-600 hover:bg-slate-100"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   포트폴리오
                 </Link>
                 <Link
                   href="/about"
-                  className="block px-4 py-2 text-blue-50 hover:bg-white/10"
+                  className="block px-4 py-2 text-slate-600 hover:bg-slate-100"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   소개
@@ -279,25 +260,25 @@ export function Header() {
                 <div className="px-4 py-2">
                   {isLoggedIn ? (
                     <div className="space-y-2">
-                      <Button variant="outline" size="sm" className="w-full border-white/40 bg-transparent text-white hover:bg-white/10 hover:text-white" asChild>
+                      <Button variant="outline" size="sm" className="w-full border-slate-200 bg-white text-[#34443c] hover:bg-slate-100" asChild>
                         <Link href="/admin/write">
                           <PenTool className="w-4 h-4 mr-2" />
                           글쓰기
                         </Link>
                       </Button>
-                      <Button variant="outline" size="sm" className="w-full border-white/40 bg-transparent text-white hover:bg-white/10 hover:text-white" asChild>
+                      <Button variant="outline" size="sm" className="w-full border-slate-200 bg-white text-[#34443c] hover:bg-slate-100" asChild>
                         <Link href="/admin/dashboard">
                           <Settings className="w-4 h-4 mr-2" />
                           관리자 대시보드
                         </Link>
                       </Button>
-                      <Button variant="outline" size="sm" className="w-full border-white/40 bg-transparent text-white hover:bg-white/10 hover:text-white" onClick={handleLogout}>
+                      <Button variant="outline" size="sm" className="w-full border-slate-200 bg-white text-[#34443c] hover:bg-slate-100" onClick={handleLogout}>
                         <LogOut className="w-4 h-4 mr-2" />
                         로그아웃
                       </Button>
                     </div>
                   ) : (
-                    <Button onClick={() => setIsLoginModalOpen(true)} size="sm" className="w-full bg-white text-blue-700 hover:bg-blue-50">
+                    <Button onClick={() => setIsLoginModalOpen(true)} size="sm" className="w-full bg-white text-[#34443c] hover:bg-[#edf2ef]">
                       <Github className="w-4 h-4 mr-2" />
                       GitHub 로그인
                     </Button>
@@ -309,7 +290,7 @@ export function Header() {
         </div>
       </header>
 
-      <div aria-hidden="true" className="h-16" />
+      <div aria-hidden="true" className="h-[72px]" />
 
       <LoginModal
         isOpen={isLoginModalOpen}

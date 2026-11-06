@@ -6,12 +6,12 @@ const technologies = ["Next.js", "TypeScript", "Spring Boot", "MySQL", "AWS", "D
 
 export default function PortfolioPage() {
   return (
-    <div className="min-h-screen bg-white text-gray-950">
+    <div className="min-h-screen bg-[#f9fafb] text-gray-950">
       <Header />
 
       <main className="mx-auto max-w-[1120px] px-5 py-16 lg:px-8 lg:py-24">
         <header className="max-w-3xl border-b border-gray-200 pb-12">
-          <p className="mb-4 text-sm font-semibold text-blue-600">Portfolio</p>
+          <p className="mb-4 text-sm font-semibold text-[#52685b]">Portfolio</p>
           <h1 className="text-4xl font-semibold leading-tight tracking-[-0.045em] md:text-6xl">
             만들고 운영하며<br />배운 것들을 기록합니다.
           </h1>
@@ -28,8 +28,8 @@ export default function PortfolioPage() {
 
           <article className="grid gap-8 border-y border-gray-200 py-10 md:grid-cols-[1fr_1.25fr] md:gap-14">
             <div>
-              <p className="mb-3 text-sm font-medium text-blue-600">개인 프로젝트</p>
-              <h3 className="text-3xl font-semibold tracking-[-0.035em]">DDONG&apos;s Blog</h3>
+              <p className="mb-3 text-sm font-medium text-[#52685b]">개인 프로젝트</p>
+              <h3 className="text-3xl font-semibold tracking-[-0.035em]">Golden Record</h3>
               <p className="mt-4 text-sm text-gray-400">기획 · 개발 · 배포 · 운영</p>
             </div>
 
@@ -43,7 +43,7 @@ export default function PortfolioPage() {
                 ))}
               </ul>
               <div className="mt-8 flex flex-wrap gap-5 text-sm font-medium">
-                <Link href="/" className="inline-flex items-center gap-1.5 text-blue-600 hover:text-blue-700">
+                <Link href="/" className="inline-flex items-center gap-1.5 text-[#52685b] hover:text-[#34443c]">
                   블로그 보기 <ArrowUpRight className="h-4 w-4" />
                 </Link>
                 <a href="https://github.com/shet6006/blog-frontend" target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-gray-600 hover:text-gray-950">
