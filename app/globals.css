@@ -25,7 +25,7 @@ html {
 }
 
 .hero-vinyl {
-  animation: vinyl-turn 80s linear infinite;
+  animation: vinyl-turn 50s linear infinite;
   transform-origin: center;
   filter: grayscale(0.65);
 }
