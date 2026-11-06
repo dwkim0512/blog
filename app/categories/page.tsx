@@ -53,11 +53,11 @@ export default function CategoriesPage() {
   }, [category, search, page, sortBy])
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#f2f3f4]">
       <Header />
 
-      <div className="mx-auto max-w-[1480px] px-5 py-12 lg:px-8">
-        <div className="grid grid-cols-1 gap-10 lg:grid-cols-[210px_minmax(0,1fr)] xl:grid-cols-[210px_minmax(0,860px)_210px] xl:justify-between xl:gap-12">
+      <div className="mx-auto max-w-[1400px] px-5 py-12 lg:px-8">
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-[210px_minmax(0,1fr)] xl:grid-cols-[190px_minmax(0,1fr)]">
           {/* Sidebar */}
           <aside>
             <div className="sticky top-24 space-y-10">
@@ -77,7 +77,7 @@ export default function CategoriesPage() {
                 <Button
                   variant={sortBy === "latest" ? "default" : "outline"}
                   size="sm"
-                  className={sortBy === "latest" ? "bg-blue-600 hover:bg-blue-700" : ""}
+                  className={sortBy === "latest" ? "bg-[#34443c] hover:bg-[#29372f]" : ""}
                   onClick={() => setSortBy("latest")}
                 >
                   최신순
@@ -85,7 +85,7 @@ export default function CategoriesPage() {
                 <Button
                   variant={sortBy === "popular" ? "default" : "outline"}
                   size="sm"
-                  className={sortBy === "popular" ? "bg-blue-600 hover:bg-blue-700" : ""}
+                  className={sortBy === "popular" ? "bg-[#34443c] hover:bg-[#29372f]" : ""}
                   onClick={() => setSortBy("popular")}
                 >
                   인기순
@@ -95,7 +95,7 @@ export default function CategoriesPage() {
 
             {Array.isArray(posts.posts) && posts.posts.length > 0 ? (
               <>
-                <div className="grid gap-7">
+                <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
                   {posts.posts.map((post: any) => (
                     <PostCard key={post.id} post={post} />
                   ))}
@@ -112,7 +112,7 @@ export default function CategoriesPage() {
             )}
           </main>
 
-          <aside className="hidden xl:block">
+          <aside className="hidden">
             <div className="sticky top-24">
               <BlogRightRail popularPosts={popularPosts} stats={stats} />
             </div>

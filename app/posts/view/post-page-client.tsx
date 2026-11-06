@@ -89,7 +89,7 @@ export default function PostPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-white">
+      <div className="min-h-screen bg-[#f9fafb]">
         <Header />
         <div className="mx-auto max-w-3xl animate-pulse px-5 py-20">
           <div className="mb-6 h-4 w-24 rounded bg-slate-200" />
@@ -103,7 +103,7 @@ export default function PostPage() {
 
   if (error || !post) {
     return (
-      <div className="min-h-screen bg-white">
+      <div className="min-h-screen bg-[#f9fafb]">
         <Header />
         <div className="mx-auto max-w-2xl px-5 py-24 text-center">
           <h1 className="mb-6 text-2xl font-bold text-slate-900">{error || "게시글을 찾을 수 없습니다."}</h1>
@@ -114,7 +114,7 @@ export default function PostPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white text-slate-950">
+    <div className="min-h-screen bg-[#f9fafb] text-slate-950">
       <Header />
       <main className="mx-auto max-w-[1480px] px-5 pb-24 pt-10 lg:px-8 lg:pt-14">
         <Link href="/" className="mb-10 inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition-colors hover:text-slate-950">

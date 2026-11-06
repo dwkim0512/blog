@@ -100,9 +100,9 @@ export function CommentSection({ postSlug }: { postSlug: string }) {
   return (
     <section aria-labelledby="comments-heading">
       <div className="mb-8 flex items-center gap-2">
-        <MessageCircle className="h-5 w-5 text-blue-600" />
+        <MessageCircle className="h-5 w-5 text-[#52685b]" />
         <h2 id="comments-heading" className="text-2xl font-semibold tracking-[-0.025em] text-gray-950">
-          댓글 <span className="text-blue-600">{comments.length}</span>
+          댓글 <span className="text-[#52685b]">{comments.length}</span>
         </h2>
       </div>
 
@@ -113,7 +113,7 @@ export function CommentSection({ postSlug }: { postSlug: string }) {
             value={authorName}
             onChange={(event) => setAuthorName(event.target.value)}
             placeholder="이름을 입력하세요"
-            className="h-11 rounded-none border-x-0 border-t-0 px-0 shadow-none focus-visible:border-blue-600 focus-visible:ring-0"
+            className="h-11 rounded-none border-x-0 border-t-0 px-0 shadow-none focus-visible:border-[#52685b] focus-visible:ring-0"
           />
         </label>
         <label className="block">
@@ -123,11 +123,11 @@ export function CommentSection({ postSlug }: { postSlug: string }) {
             onChange={(event) => setNewComment(event.target.value)}
             placeholder="댓글을 입력하세요"
             rows={4}
-            className="resize-none rounded-none border-gray-200 p-4 shadow-none focus-visible:border-blue-600 focus-visible:ring-1 focus-visible:ring-blue-600"
+            className="resize-none rounded-none border-gray-200 p-4 shadow-none focus-visible:border-[#52685b] focus-visible:ring-1 focus-visible:ring-blue-600"
           />
         </label>
         <div className="mt-4 flex justify-end">
-          <Button type="submit" className="bg-blue-600 px-5 hover:bg-blue-700">댓글 작성</Button>
+          <Button type="submit" className="bg-[#34443c] px-5 hover:bg-[#29372f]">댓글 작성</Button>
         </div>
       </form>
 
@@ -138,7 +138,7 @@ export function CommentSection({ postSlug }: { postSlug: string }) {
               <div className="min-w-0 pr-5">
                 <div className="mb-3 flex items-center gap-2">
                   <span className="font-semibold text-gray-950">{comment.author_name}</span>
-                  {comment.is_admin && <span className="text-xs font-medium text-blue-600">관리자</span>}
+                  {comment.is_admin && <span className="text-xs font-medium text-[#52685b]">관리자</span>}
                 </div>
                 <p className="whitespace-pre-wrap leading-7 text-gray-700">{comment.content}</p>
                 <p className="mt-3 text-xs text-gray-400">{new Date(comment.created_at).toLocaleDateString("ko-KR")}</p>

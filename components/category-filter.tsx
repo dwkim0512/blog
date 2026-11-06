@@ -41,7 +41,7 @@ export function CategoryFilter({ categories, basePath = "/", onNavigateStart }: 
           onClick={() => handleCategoryClick("All")}
           className={`block w-full border-b border-gray-100 px-0 py-3 text-left text-sm transition-colors ${
             selectedCategory === "All"
-              ? "border-b-blue-600 font-semibold text-blue-600"
+              ? "border-b-[#52685b] font-semibold text-[#52685b]"
               : "text-gray-500 hover:text-gray-950"
           }`}
         >
@@ -53,7 +53,7 @@ export function CategoryFilter({ categories, basePath = "/", onNavigateStart }: 
             onClick={() => handleCategoryClick(category.name)}
             className={`flex w-full items-center justify-between border-b border-gray-100 px-0 py-3 text-left text-sm transition-colors ${
               selectedCategory === category.name
-                ? "border-b-blue-600 font-semibold text-blue-600"
+                ? "border-b-[#52685b] font-semibold text-[#52685b]"
                 : "text-gray-500 hover:text-gray-950"
             }`}
           >

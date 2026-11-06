@@ -167,7 +167,7 @@ export default function EditPostPage() {
   const thumbnailPreview = resolvePostThumbnail(post.content || "", post.thumbnail_url)
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#f2f3f4]">
       <Header />
       <div className="mx-auto max-w-7xl px-4 py-8">
         <div className="mb-8 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
