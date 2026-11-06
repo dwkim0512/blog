@@ -98,19 +98,19 @@ export default function HomePage() {
       </section>
 
       <main id="posts" className="mx-auto max-w-[1400px] scroll-mt-24 px-5 py-8 pb-20 lg:px-8 lg:py-10">
-        <nav aria-label="게시글 카테고리" className="mb-7 flex flex-wrap gap-x-5 gap-y-2">
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+        <nav aria-label="게시글 카테고리" className="flex flex-wrap items-center gap-x-5 gap-y-2">
           {[{ id: 0, name: "" }, ...categories].map(item => (
             <Link key={item.id} href={categoryHref(item.name)} aria-current={category === item.name ? "page" : undefined} className={`border-b-2 px-1 py-2 text-sm font-semibold ${category === item.name ? "border-[#34443c] text-[#34443c]" : "border-transparent text-slate-500 hover:text-slate-900"}`}>{item.name || "전체"}</Link>
           ))}
         </nav>
-        <div className="mb-5 flex flex-wrap items-center justify-between gap-4">
-          {search ? <h2 className="text-sm text-slate-600">{`“${search}” 검색 결과`}</h2> : <h2 className="sr-only">게시글 목록</h2>}
           <div role="group" aria-label="게시글 정렬" className="ml-auto flex items-center gap-3 text-sm">
             <button type="button" className={`rounded-sm py-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#52685b] ${sortBy === "latest" ? "font-medium text-[#34443c]" : "text-slate-400 hover:text-slate-700"}`} aria-pressed={sortBy === "latest"} onClick={() => setSortBy("latest")}>최신순</button>
             <span aria-hidden="true" className="text-slate-300">·</span>
             <button type="button" className={`rounded-sm py-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#52685b] ${sortBy === "popular" ? "font-medium text-[#34443c]" : "text-slate-400 hover:text-slate-700"}`} aria-pressed={sortBy === "popular"} onClick={() => setSortBy("popular")}>인기순</button>
           </div>
         </div>
+        {search ? <h2 className="mb-5 text-sm text-slate-600">{`“${search}” 검색 결과`}</h2> : <h2 className="sr-only">게시글 목록</h2>}
         {loading ? (
           <div aria-label="게시글 불러오는 중" role="status" className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {[0, 1, 2].map(index => <div key={index} className="overflow-hidden rounded-lg border border-slate-200 bg-white"><Skeleton className="aspect-[2/1] w-full rounded-none" /><div className="space-y-4 p-6"><Skeleton className="h-4 w-20" /><Skeleton className="h-6 w-4/5" /><Skeleton className="h-12 w-full" /></div></div>)}
