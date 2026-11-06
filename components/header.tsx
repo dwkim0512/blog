@@ -2,7 +2,7 @@
 
 import { useState, useEffect, type FormEvent } from "react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
@@ -27,6 +27,8 @@ export function Header() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
   const router = useRouter()
+  const pathname = usePathname()
+  const menuClass = (href: string) => `text-sm font-medium transition-colors ${pathname.replace(/\/$/, "") === href.replace(/\/$/, "") ? "text-[#34443c]" : "text-slate-400 hover:text-[#34443c]"}`
   const headerClass = "border-slate-200 bg-white/95 backdrop-blur-xl"
   const foregroundClass = "text-slate-950"
   const mutedClass = "text-slate-500 hover:text-[#34443c]"
@@ -135,16 +137,16 @@ export function Header() {
 
             {/* Desktop Navigation */}
             <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-10 xl:flex lg:gap-16">
-              <Link href="/" className={`text-sm font-semibold transition-colors ${mutedClass}`}>
+              <Link href="/" className={menuClass("/")} aria-current={pathname === "/" ? "page" : undefined}>
                 홈
               </Link>
-              <Link href="/categories" className={`text-sm font-semibold transition-colors ${mutedClass}`}>
+              <Link href="/categories" className={menuClass("/categories")}>
                 카테고리
               </Link>
-              <Link href="/portfolio" className={`text-sm font-semibold transition-colors ${mutedClass}`}>
+              <Link href="/portfolio" className={menuClass("/portfolio")}>
                 포트폴리오
               </Link>
-              <Link href="/about" className={`text-sm font-semibold transition-colors ${mutedClass}`}>
+              <Link href="/about" className={menuClass("/about")}>
                 소개
               </Link>
             </nav>
