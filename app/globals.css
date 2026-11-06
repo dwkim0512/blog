@@ -11,8 +11,13 @@ body {
 }
 
 html {
+  scrollbar-gutter: stable;
   scroll-behavior: smooth;
   scroll-padding-top: 6rem;
+}
+
+@supports not (scrollbar-gutter: stable) {
+  html { overflow-y: scroll; }
 }
 
 @keyframes vinyl-turn {

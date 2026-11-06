@@ -106,30 +106,7 @@ export function CommentSection({ postSlug }: { postSlug: string }) {
         </h2>
       </div>
 
-      <form onSubmit={handleSubmit} className="border-b border-gray-200 pb-10">
-        <label className="mb-5 block max-w-xs">
-          <span className="mb-2 block text-sm font-medium text-gray-700">이름</span>
-          <Input
-            value={authorName}
-            onChange={(event) => setAuthorName(event.target.value)}
-            placeholder="이름을 입력하세요"
-            className="h-11 rounded-none border-x-0 border-t-0 px-0 shadow-none focus-visible:border-[#52685b] focus-visible:ring-0"
-          />
-        </label>
-        <label className="block">
-          <span className="mb-2 block text-sm font-medium text-gray-700">댓글</span>
-          <Textarea
-            value={newComment}
-            onChange={(event) => setNewComment(event.target.value)}
-            placeholder="댓글을 입력하세요"
-            rows={4}
-            className="resize-none rounded-none border-gray-200 p-4 shadow-none focus-visible:border-[#52685b] focus-visible:ring-1 focus-visible:ring-blue-600"
-          />
-        </label>
-        <div className="mt-4 flex justify-end">
-          <Button type="submit" className="bg-[#34443c] px-5 hover:bg-[#29372f]">댓글 작성</Button>
-        </div>
-      </form>
+
 
       <div className="divide-y divide-gray-200">
         {comments.map((comment) => (
@@ -159,6 +136,30 @@ export function CommentSection({ postSlug }: { postSlug: string }) {
         ))}
         {comments.length === 0 && <p className="py-10 text-sm text-gray-400">첫 번째 댓글을 남겨보세요.</p>}
       </div>
+      <form onSubmit={handleSubmit} className="mt-6 border-t border-gray-200 pt-6">
+        <label className="mb-5 block max-w-xs">
+          <span className="mb-2 block text-sm font-medium text-gray-700">이름</span>
+          <Input
+            value={authorName}
+            onChange={(event) => setAuthorName(event.target.value)}
+            placeholder="이름을 입력하세요"
+            className="h-11 rounded-none border-x-0 border-t-0 px-0 shadow-none focus-visible:border-[#52685b] focus-visible:ring-0"
+          />
+        </label>
+        <label className="block">
+          <span className="mb-2 block text-sm font-medium text-gray-700">댓글</span>
+          <Textarea
+            value={newComment}
+            onChange={(event) => setNewComment(event.target.value)}
+            placeholder="댓글을 입력하세요"
+            rows={4}
+            className="resize-none rounded-none border-gray-200 p-4 shadow-none focus-visible:border-[#52685b] focus-visible:ring-1 focus-visible:ring-[#52685b]"
+          />
+        </label>
+        <div className="mt-4 flex justify-end">
+          <Button type="submit" className="bg-[#34443c] px-5 hover:bg-[#29372f]">댓글 작성</Button>
+        </div>
+      </form>
     </section>
   )
 }
