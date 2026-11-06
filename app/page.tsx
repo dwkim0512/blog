@@ -78,8 +78,7 @@ export default function HomePage() {
             <section aria-label="프로필 명함" className="flex w-full max-w-[480px] flex-col items-start gap-5 rounded-lg border border-[#dfe3dc] bg-white p-6 sm:aspect-[1.8/1] sm:flex-row sm:items-center sm:gap-6 sm:p-8">
               <img src={profile?.avatar_url || "/default-profile.svg"} alt={`${profile?.name || "개발자"} 프로필`} className="h-16 w-16 shrink-0 rounded-full border border-slate-200 object-cover sm:h-24 sm:w-24" />
               <div className="min-w-0 flex-1">
-                <p className="text-xs font-semibold text-[#4f6258]">개발자 블로그</p>
-                <h1 className="mt-2 text-3xl font-semibold tracking-[-0.04em] text-[#242b25]">{profile?.name || "Golden Record"}</h1>
+                <h1 className="text-3xl font-semibold tracking-[-0.04em] text-[#242b25]">{profile?.name || "Golden Record"}</h1>
                 <p className="mt-3 text-sm leading-6 text-[#70756b]">{profile?.bio || "개발하며 배우고 경험한 내용을 기록합니다."}</p>
                 <ProfileContact githubUsername={profile?.github_username} />
                 <Link href="/about" className="mt-3 inline-flex items-center gap-1 text-xs text-[#66735f] hover:underline">더 보기 <ArrowRight className="h-3.5 w-3.5" /></Link>
