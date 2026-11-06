@@ -9,7 +9,6 @@ import { CommentSection } from "@/components/comment-section"
 import { LikeButton } from "@/components/like-button"
 import { MarkdownArticle, extractArticleHeadings } from "@/components/markdown-article"
 import { TableOfContents } from "@/components/table-of-contents"
-import { SearchBar } from "@/components/search-bar"
 import { CategoryFilter } from "@/components/category-filter"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -116,15 +115,14 @@ export default function PostPage() {
   return (
     <div className="min-h-screen bg-[#f9fafb] text-slate-950">
       <Header />
-      <main className="mx-auto max-w-[1480px] px-5 pb-24 pt-10 lg:px-8 lg:pt-14">
+      <main className="mx-auto max-w-[1400px] px-5 pb-24 pt-10 lg:px-8 lg:pt-12">
         <Link href="/" className="mb-10 inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition-colors hover:text-slate-950">
           <ArrowLeft className="h-4 w-4" />글 목록
         </Link>
 
-        <div className="grid gap-10 lg:grid-cols-[210px_minmax(0,1fr)] xl:grid-cols-[210px_minmax(0,860px)_210px] xl:justify-between xl:gap-12 xl:items-start">
+        <div className="grid items-start gap-8 lg:grid-cols-[160px_minmax(0,1fr)] lg:gap-10 xl:grid-cols-[160px_minmax(0,1fr)_180px]">
           <aside className="hidden lg:block">
             <div className="sticky top-24 space-y-10">
-              <SearchBar />
               <CategoryFilter categories={categories} />
             </div>
           </aside>

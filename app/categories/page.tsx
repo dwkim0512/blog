@@ -5,7 +5,6 @@ import { useEffect, useState } from "react"
 import { Header } from "@/components/header"
 import { PostCard } from "@/components/post-card"
 import { CategoryFilter } from "@/components/category-filter"
-import { SearchBar } from "@/components/search-bar"
 import { Button } from "@/components/ui/button"
 import { apiClient } from "@/lib/api-client"
 import { BlogRightRail } from "@/components/blog-right-rail"
@@ -57,11 +56,10 @@ export default function CategoriesPage() {
       <Header />
 
       <div className="mx-auto max-w-[1400px] px-5 py-12 lg:px-8">
-        <div className="grid grid-cols-1 gap-10 lg:grid-cols-[210px_minmax(0,1fr)] xl:grid-cols-[190px_minmax(0,1fr)]">
+        <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-[160px_minmax(0,1fr)] lg:gap-10">
           {/* Sidebar */}
           <aside>
             <div className="sticky top-24 space-y-10">
-              <SearchBar />
               <CategoryFilter categories={categories} basePath="/categories" />
             </div>
           </aside>
