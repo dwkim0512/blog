@@ -8,7 +8,6 @@ import { Header } from "@/components/header"
 import { PostCard } from "@/components/post-card"
 import { ProfileContact } from "@/components/profile-contact"
 import { PostPagination } from "@/components/post-pagination"
-import { SearchBar } from "@/components/search-bar"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import { apiClient, getApiBaseUrl } from "@/lib/api-client"
@@ -108,7 +107,6 @@ export default function HomePage() {
         <div className="mb-6 flex flex-wrap items-end justify-between gap-5 border-b border-slate-200 pb-5">
           <h2 className="text-2xl font-semibold tracking-tight text-slate-950">{search ? `“${search}” 검색 결과` : category || "전체 게시글"}</h2>
           <div className="flex flex-wrap items-end gap-3">
-            <div className="w-48"><SearchBar /></div>
             <div className="flex gap-2">
             <Button size="sm" variant={sortBy === "latest" ? "default" : "outline"} aria-pressed={sortBy === "latest"} onClick={() => setSortBy("latest")}>최신순</Button>
             <Button size="sm" variant={sortBy === "popular" ? "default" : "outline"} aria-pressed={sortBy === "popular"} onClick={() => setSortBy("popular")}>인기순</Button>
