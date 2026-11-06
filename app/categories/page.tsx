@@ -56,17 +56,17 @@ export default function CategoriesPage() {
       <Header />
 
       <div className="mx-auto max-w-[1400px] px-5 py-12 lg:px-8">
-        <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-[160px_minmax(0,1fr)] lg:gap-10">
+        <div className="space-y-8">
           {/* Sidebar */}
           <aside>
-            <div className="sticky top-24 space-y-10">
-              <CategoryFilter categories={categories} basePath="/categories" />
+            <div>
+              <CategoryFilter categories={categories} basePath="/categories" horizontal />
             </div>
           </aside>
 
           {/* Posts Grid */}
           <main id="posts" className="min-w-0 scroll-mt-24">
-            <div className="mb-7 flex items-center justify-between border-b border-gray-200 pb-5">
+            <div className="mb-7 flex flex-wrap items-center justify-between gap-4 pb-2">
               <h2 className="text-2xl font-semibold tracking-[-0.025em] text-gray-950">
                 {category && category !== "All" ? `${category} 게시글` : "모든 카테고리"}
                 {search && ` - "${search}" 검색 결과`}

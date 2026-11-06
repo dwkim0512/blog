@@ -115,20 +115,15 @@ export default function PostPage() {
   return (
     <div className="min-h-screen bg-[#f9fafb] text-slate-950">
       <Header />
-      <main className="mx-auto max-w-[1400px] px-5 pb-24 pt-10 lg:px-8 lg:pt-12">
+      <main className="mx-auto max-w-[1120px] px-5 pb-24 pt-10 lg:px-8 lg:pt-12">
         <Link href="/" className="mb-10 inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition-colors hover:text-slate-950">
           <ArrowLeft className="h-4 w-4" />글 목록
         </Link>
 
-        <div className="grid items-start gap-8 lg:grid-cols-[160px_minmax(0,1fr)] lg:gap-10 xl:grid-cols-[160px_minmax(0,1fr)_180px]">
-          <aside className="hidden lg:block">
-            <div className="sticky top-24 space-y-10">
-              <CategoryFilter categories={categories} />
-            </div>
-          </aside>
+        <div className="grid items-start gap-12 xl:grid-cols-[minmax(0,760px)_200px] xl:gap-16">
 
           <article className="min-w-0">
-            <header className="mb-12 pb-10">
+            <header className="mb-10 pb-2">
               <Badge variant="secondary" className="mb-5 rounded-none bg-transparent px-0 text-gray-700 hover:bg-transparent">{post.category_name || "미분류"}</Badge>
               <h1 className="text-balance text-4xl font-semibold leading-[1.18] tracking-[-0.04em] text-slate-950 md:text-5xl">{post.title}</h1>
               <div className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-3 text-sm text-slate-500">
@@ -153,7 +148,10 @@ export default function PostPage() {
             <div className="mt-14"><CommentSection postSlug={post.slug} /></div>
           </article>
 
-          <aside className="sticky top-24 hidden xl:block"><TableOfContents headings={headings} /></aside>
+          <aside className="sticky top-24 hidden space-y-10 xl:block">
+            <TableOfContents headings={headings} />
+            <CategoryFilter categories={categories} />
+          </aside>
         </div>
       </main>
     </div>
