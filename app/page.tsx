@@ -26,7 +26,7 @@ export default function HomePage() {
   const [categories, setCategories] = useState<Category[]>([])
   const [latest, setLatest] = useState<Post[]>([])
   const [profile, setProfile] = useState<Profile | null>(null)
-  const [sortBy, setSortBy] = useState<"latest" | "popular">("latest")
+  const [sortBy, setSortBy] = useState<"latest" | "popular">("popular")
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
 
@@ -105,9 +105,9 @@ export default function HomePage() {
           ))}
         </nav>
           <div role="group" aria-label="게시글 정렬" className="ml-auto flex items-center gap-3 text-sm">
-            <button type="button" className={`rounded-sm py-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#52685b] ${sortBy === "latest" ? "font-medium text-[#34443c]" : "text-slate-400 hover:text-slate-700"}`} aria-pressed={sortBy === "latest"} onClick={() => setSortBy("latest")}>최신순</button>
-            <span aria-hidden="true" className="text-slate-300">·</span>
             <button type="button" className={`rounded-sm py-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#52685b] ${sortBy === "popular" ? "font-medium text-[#34443c]" : "text-slate-400 hover:text-slate-700"}`} aria-pressed={sortBy === "popular"} onClick={() => setSortBy("popular")}>인기순</button>
+            <span aria-hidden="true" className="text-slate-300">·</span>
+            <button type="button" className={`rounded-sm py-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#52685b] ${sortBy === "latest" ? "font-medium text-[#34443c]" : "text-slate-400 hover:text-slate-700"}`} aria-pressed={sortBy === "latest"} onClick={() => setSortBy("latest")}>최신순</button>
           </div>
         </div>
         {search ? <h2 className="mb-5 text-sm text-slate-600">{`“${search}” 검색 결과`}</h2> : <h2 className="sr-only">게시글 목록</h2>}
