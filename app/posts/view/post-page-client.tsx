@@ -130,7 +130,7 @@ export default function PostPage() {
           </aside>
 
           <article className="min-w-0">
-            <header className="mb-12 border-b border-slate-200 pb-10">
+            <header className="mb-12 pb-10">
               <Badge variant="secondary" className="mb-5 rounded-none bg-transparent px-0 text-gray-700 hover:bg-transparent">{post.category_name || "미분류"}</Badge>
               <h1 className="text-balance text-4xl font-semibold leading-[1.18] tracking-[-0.04em] text-slate-950 md:text-5xl">{post.title}</h1>
               <div className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-3 text-sm text-slate-500">
