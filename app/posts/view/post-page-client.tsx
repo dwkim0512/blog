@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
-import { ArrowLeft, CalendarDays, Heart, MessageCircle, Pencil, Trash2 } from "lucide-react"
+import { CalendarDays, Heart, MessageCircle, Pencil, Trash2 } from "lucide-react"
 import { Header } from "@/components/header"
 import { CommentSection } from "@/components/comment-section"
 import { LikeButton } from "@/components/like-button"
@@ -116,10 +116,6 @@ export default function PostPage() {
     <div className="min-h-screen bg-[#f9fafb] text-slate-950">
       <Header />
       <main className="mx-auto max-w-[1400px] px-5 pb-24 pt-10 lg:px-8 lg:pt-12">
-        <Link href="/" className="mb-10 inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition-colors hover:text-slate-950">
-          <ArrowLeft className="h-4 w-4" />글 목록
-        </Link>
-
         <div className="grid items-start gap-8 lg:grid-cols-[180px_minmax(0,1fr)] lg:gap-12 xl:grid-cols-[180px_minmax(0,1fr)_180px]">
           <aside className="hidden lg:block"><div className="sticky top-28"><CategoryFilter categories={categories} basePath="/categories" /></div></aside>
 
