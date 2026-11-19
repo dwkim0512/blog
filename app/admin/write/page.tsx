@@ -16,6 +16,7 @@ import { getApiBaseUrl } from "@/lib/api-client"
 import { MarkdownEditor } from "@/components/markdown-editor"
 import { FormSkeleton } from "@/components/page-skeleton"
 import { getPostImageCount, getPostImageUrls, MAX_POST_IMAGES, resolvePostThumbnail } from "@/lib/post-images"
+import { createPostPayload } from "@/lib/admin-post-payload.cjs"
 
 interface Category {
   id: number
@@ -121,12 +122,7 @@ export default function WritePage() {
           "Content-Type": "application/json",
         },
         credentials: "include",
-        body: JSON.stringify({
-          ...post,
-          content: post.content,
-          category_id: Number.parseInt(post.category_id) || 0,
-          is_public: false, // 임시저장은 항상 비공개
-        }),
+        body: JSON.stringify(createPostPayload(post, { draft: true })),
       })
 
       const data = await readResponse(response)
@@ -152,18 +148,13 @@ export default function WritePage() {
           "Content-Type": "application/json",
         },
         credentials: "include",
-        body: JSON.stringify({
-          ...post,
-          content: post.content,
-          category_id: Number.parseInt(post.category_id) || 0,
-          is_public: true,
-        }),
+        body: JSON.stringify(createPostPayload(post)),
       })
 
       const data = await readResponse(response)
 
       if (response.ok) {
-        toast.success("게시글이 발행되었습니다.")
+        toast.success(post.is_public ? "게시글이 발행되었습니다." : "게시글이 비공개로 저장되었습니다.")
         router.push("/admin/dashboard")
       } else {
         const message = data.error || data.message || `게시글 발행에 실패했습니다. (HTTP ${response.status})`
@@ -285,7 +276,7 @@ export default function WritePage() {
               <Save className="w-4 h-4 mr-2" />
               임시저장
             </Button>
-            <Button onClick={handlePublish}>게시하기</Button>
+            <Button onClick={handlePublish}>{post.is_public ? "게시하기" : "비공개로 저장"}</Button>
           </div>
         </div>
 
